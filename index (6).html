@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Emberlane | Growth, engineered (v5)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0B0D;--tx:#F4F1EA;--mu:#9a978f;--ac:#FF6B2C;--gl:#FFB347}
+*{margin:0;box-sizing:border-box}
+html{background:var(--bg);color:var(--tx);font:16px/1.55 Inter,system-ui,sans-serif}
+body{overflow-x:hidden}
+h1,h2,h3,.big{font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;letter-spacing:-.03em;line-height:1.03}
+.mono{font:500 13px 'JetBrains Mono',monospace;color:var(--ac)}
+nav{position:fixed;inset:0 0 auto 0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:20px 5vw;transition:transform .4s;opacity:0}
+nav.hide{transform:translateY(-110%)}
+.logo,.mark{font:600 22px 'Space Grotesk',sans-serif;letter-spacing:-.02em}
+nav a{color:var(--tx);text-decoration:none;margin-left:28px;font-size:14px;opacity:.8}
+nav a:hover,nav a:focus-visible{opacity:1}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gl);outline-offset:3px}
+.btn{display:inline-block;padding:13px 24px;border-radius:99px;background:var(--ac);color:#140a05!important;font-weight:500;opacity:1!important;margin-left:0}
+.btn.o{background:none;border:1px solid #fff4;color:var(--tx)!important}
+nav .btn{margin-left:28px;padding:11px 22px}
+.hero .btn{padding:12px 22px;font-size:15px}
+canvas{-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+#stage{height:1000vh;position:relative}
+.pin{position:sticky;top:0;height:100vh;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%}
+.spot{position:absolute;inset:0;pointer-events:none;opacity:0;background:linear-gradient(#0B0B0Dd9 0 26%,#0B0B0D00 41% 59%,#0B0B0Dd9 74% 100%)}
+.wash{position:absolute;inset:0;background:#E85D1F;opacity:0;pointer-events:none}
+.hero{position:absolute;left:5vw;bottom:9vh;width:min(34vw,640px);max-height:calc(100vh - 150px)}
+.hero h1{font-size:clamp(30px,min(3.3vw,7vh),64px)}
+.ln{display:block}
+.hero p{margin:20px 0 24px;color:var(--mu);max-width:440px;font-size:clamp(14px,1.1vw,17px)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btns a{text-decoration:none}
+.cue{display:block;margin-top:22px}
+.t{position:absolute;opacity:0;pointer-events:none}
+.story{left:5vw;top:50%;translate:0 -50%;width:min(44vw,620px);font-size:clamp(32px,4.8vw,72px)}
+.story.s{font-size:clamp(24px,3vw,44px)}
+.part{top:50%;translate:0 -50%;width:min(30vw,420px)}
+.part.l{left:5vw}.part.r{right:7vw}
+.part h3{font-size:clamp(30px,3.6vw,54px);margin:8px 0 10px}
+.part p{color:var(--mu)}
+.part b{display:block;margin-top:18px;color:var(--gl);font:500 14px 'JetBrains Mono',monospace}
+.rail{position:absolute;right:2vw;top:50%;translate:0 -50%;display:flex;flex-direction:column;gap:12px;opacity:0}
+.rail i{width:7px;height:7px;border-radius:50%;background:#fff3;transition:.3s}
+.rail i.on{background:var(--ac);transform:scale(1.7)}
+#ld{position:fixed;inset:0;z-index:50;background:var(--bg);--r:0%;-webkit-mask:radial-gradient(circle at 50% 50%,transparent var(--r),#000 calc(var(--r) + 1px));mask:radial-gradient(circle at 50% 50%,transparent var(--r),#000 calc(var(--r) + 1px))}
+#cnt{position:absolute;left:50%;bottom:9vh;translate:-50% 0;font:500 14px 'JetBrains Mono',monospace;color:var(--mu)}
+.mark{position:fixed;z-index:60;left:50%;top:50%;translate:-50% -50%;font-size:34px}
+#err{display:none;position:fixed;inset:0;z-index:70;background:var(--bg);padding:20vh 8vw;font-size:20px}
+#err code{color:var(--gl)}
+#after{min-height:100vh;background:linear-gradient(#E85D1F,var(--bg) 90vh);padding:34vh 5vw 20vh}
+#after h2{font-size:clamp(34px,5vw,72px);max-width:14em}
+#after p{margin-top:20px;color:var(--mu);max-width:520px}
+@media (max-aspect-ratio:1/1){
+.part,.story{left:6vw!important;right:6vw!important;top:auto;bottom:8vh;translate:0;width:auto}
+.hero{width:88vw;bottom:9vh}.rail{display:none}nav a:not(.btn){display:none}}
+.rm #stage{height:auto}
+.rm .pin{position:relative;height:auto;padding:16vh 5vw}
+.rm canvas{position:relative;height:70vh;margin:6vh 0}
+.rm .t,.rm .hero{position:static;opacity:1!important;transform:none!important;translate:none;width:auto;margin:2.5rem 0}
+.rm .spot,.rm .wash,.rm .rail{display:none}
+</style>
+</head>
+<body>
+<div id="err"><h2 class="big">Frames not found</h2><p style="margin-top:16px;max-width:34em">Put this file in the same folder as your <code>frames</code> folder, so that <code>frames/a/a-0001.webp</code> exists, then reload.</p></div>
+<div id="ld"><span id="cnt">000</span></div>
+<span class="mark">Emberlane</span>
+<nav id="nav"><span class="logo">Emberlane</span><div><a href="#">Services</a><a href="#">Work</a><a href="#">Process</a><a class="btn" href="#">Start a project</a></div></nav>
+<main>
+<section id="stage">
+ <div class="pin">
+  <canvas id="cv"></canvas>
+  <div class="spot"></div>
+  <div class="wash"></div>
+  <div class="hero" id="hero">
+   <h1><span class="ln">Brands don't grow</span><span class="ln">by accident.</span><span class="ln">They're engineered.</span></h1>
+   <p>Emberlane is the full growth engine: strategy, creative, content, ads, search and data, built as one machine.</p>
+   <div class="btns"><a class="btn" href="#">See how it works</a><a class="btn o" href="#">Start a project</a></div>
+   <span class="mono cue">Scroll to open it</span>
+  </div>
+  <div class="rail" id="rail"></div>
+ </div>
+</section>
+<section id="after"><span class="mono">Phase 4</span><h2 class="big">Proof, work, process and contact go here.</h2><p>This section is a placeholder. The stage above is the part to test.</p></section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+/* ---- CONFIG: everything you may want to tune ---- */
+const TOTAL=900;                         // scroll length of the pinned stage, in screen heights
+const F={a:n=>`frames/a/a-${String(n).padStart(4,'0')}.webp`,b:n=>`frames/b/b-${String(n).padStart(4,'0')}.webp`};
+const FOCUS=[.18,.31,.44,.57,.70,.83];   // vertical position (0 top, 1 bottom) of each part in the exploded frame
+const ZOOM=1.9;                          // how far the camera zooms in on a part
+const PARTS=[
+ ['01','Strategy','We start with the blueprint.','Positioning, audience and a plan with numbers attached.','240 markets mapped'],
+ ['02','Brand','A look people remember.','Identity, voice and design systems that stay consistent everywhere.','85 brands launched'],
+ ['03','Content','Stories that earn attention.','Video, social and editorial built for the feed, not just the brief.','120M views created'],
+ ['04','Performance','Spend that pays you back.','Paid social and search, tuned weekly against real revenue.','4.8x average return'],
+ ['05','SEO and Web','Found first. Fast to convert.','Search-led sites and landing pages that turn visits into leads.','+310% organic traffic'],
+ ['06','Analytics','Every decision backed by data.','One dashboard, honest reporting, no vanity metrics.','2.4M data points a week']];
+const STORY=[[60,120,'Every brand is a machine.',''],[150,220,'Most are missing parts.',''],[250,280,'Six parts. One system.','s'],[735,785,'Together, it runs.',''],[785,845,'One team. One system. Measurable growth.','s']];
+/* ---- helpers ---- */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)),sm=t=>t*t*(3-2*t);
+const ramp=(v,a,b)=>cl(Math.min((v-a)/12,(b-v)/12));
+const lm=(v,P)=>{if(v<=P[0][0])return P[0][1];for(let i=1;i<P.length;i++)if(v<=P[i][0]){const[a,x]=P[i-1],[b,y]=P[i];return x+(y-x)*(v-a)/(b-a)}return P.at(-1)[1]};
+const MA=[[0,0],[40,.06],[240,.7],[280,1]],MB=[[700,0],[850,1]];
+const CAM0={z:1,y:.5},K=[[280,CAM0]];
+FOCUS.forEach((f,i)=>{const c={z:ZOOM,y:f},s=280+i*70;K.push([s+15,c],[s+55,c])});K.push([700,CAM0]);
+const cam=v=>{if(v<=K[0][0])return CAM0;for(let i=1;i<K.length;i++)if(v<=K[i][0]){const[a,p]=K[i-1],[b,q]=K[i],t=sm((v-a)/(b-a));return{z:p.z+(q.z-p.z)*t,y:p.y+(q.y-p.y)*t}}return CAM0};
+/* ---- build text blocks ---- */
+const pin=$('.pin'),rail=$('#rail');
+PARTS.forEach((p,i)=>{const d=document.createElement('div');d.className='t part '+(i%2?'l':'r');d.dataset.a=290+i*70;d.dataset.b=340+i*70;
+ d.innerHTML=`<span class="mono">${p[0]}</span><h3>${p[1]}</h3><p><strong>${p[2]}</strong> ${p[3]}</p><b>${p[4]}</b>`;pin.append(d);rail.append(document.createElement('i'))});
+STORY.forEach(s=>{const d=document.createElement('h2');d.className='t story '+s[3];d.dataset.a=s[0];d.dataset.b=s[1];d.textContent=s[2];pin.append(d)});
+/* ---- frame player ---- */
+const cv=$('#cv'),x2=cv.getContext('2d'),S={a:{n:0,im:[]},b:{n:0,im:[]}};
+let V=0,dirty=true,intro=false,introF=0,HI=null;
+{const h=new Image();h.onload=()=>{HI=h;dirty=true};h.src='frames/a-hires.webp'}
+const rs=()=>{const d=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*d;cv.height=innerHeight*d;dirty=true};addEventListener('resize',rs);rs();
+const ok=u=>new Promise(r=>{const i=new Image();i.onload=()=>r(1);i.onerror=()=>r(0);i.src=u});
+async function count(f){if(!await ok(f(1)))return 0;let lo=1;while(await ok(f(lo*2)))lo*=2;let hi=lo*2;while(hi-lo>1){const m=(lo+hi)>>1;(await ok(f(m)))?lo=m:hi=m}return lo}
+const ld=(k,i)=>new Promise(r=>{const m=new Image();m.onload=()=>{S[k].im[i]=m;r()};m.onerror=r;m.src=F[k](i+1)});
+const pick=(k,i)=>{const im=S[k].im;for(let j=i;j>=0;j--)if(im[j])return im[j];for(let j=i;j<im.length;j++)if(im[j])return im[j];return null};
+const tc=document.createElement('canvas'),tx=tc.getContext('2d');
+function paint(im,ox,oy,dw,dh){x2.drawImage(im,ox,oy,dw,dh);
+ const iw=im.naturalWidth,ih=im.naturalHeight,pw=Math.round(iw*.17),ph=Math.round(ih*.26);
+ tc.width=pw;tc.height=ph;tx.setTransform(-1,0,0,1,pw,0);tx.drawImage(im,0,ih-ph,pw,ph,0,0,pw,ph);tx.setTransform(1,0,0,1,0,0);
+ tx.globalCompositeOperation='destination-in';
+ let g=tx.createLinearGradient(0,0,pw,0);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(.3,'#000');tx.fillStyle=g;tx.fillRect(0,0,pw,ph);
+ g=tx.createLinearGradient(0,0,0,ph);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(.2,'#000');tx.fillStyle=g;tx.fillRect(0,0,pw,ph);
+ tx.globalCompositeOperation='source-over';
+ const k=dw/iw;for(let j=0;j<2;j++)x2.drawImage(tc,ox+dw-pw*k,oy+dh-ph*k,pw*k,ph*k)}
+function draw(k,f,c){const n=S[k].n;if(!n)return;const x=f*(n-1),i=Math.floor(x),t=x-i,a=(k==='a'&&f>.999&&HI)||pick(k,i);if(!a)return;
+ const W=cv.width,H=cv.height,sc=H/a.naturalHeight,dw=a.naturalWidth*sc,dh=a.naturalHeight*sc,ox=(W-dw)/2,oy=(H-dh)/2;
+ x2.setTransform(1,0,0,1,0,0);x2.imageSmoothingEnabled=true;x2.imageSmoothingQuality='high';x2.clearRect(0,0,W,H);x2.translate(W/2,H/2);x2.scale(c.z,c.z);x2.translate(-W/2,-(oy+c.y*dh));
+ paint(a,ox,oy,dw,dh);const b=pick(k,Math.min(n-1,i+1));if(b&&b!==a&&t>.02){x2.globalAlpha=t;paint(b,ox,oy,dw,dh);x2.globalAlpha=1}}
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;if(RM)document.documentElement.classList.add('rm');
+const texts=$$('.t[data-a]'),dots=$$('#rail i'),spot=$('.spot'),wash=$('.wash'),hero=$('#hero');
+function render(){
+ if(RM){draw('a',1,CAM0);return}
+ if(intro)draw('a',introF,CAM0);else if(V<700)draw('a',lm(V,MA),cam(V));else draw('b',lm(V,MB),cam(V));
+ texts.forEach(e=>{const o=ramp(V,+e.dataset.a,+e.dataset.b);e.style.opacity=o;e.style.transform=`translateY(${(1-o)*26}px)`});
+ hero.style.opacity=cl(1-V/30);hero.style.pointerEvents=V<25?'auto':'none';
+ spot.style.opacity=ramp(V,285,692);wash.style.opacity=cl((V-850)/50);
+ rail.style.opacity=ramp(V,255,700);const ai=cl(Math.floor((V-280)/70),0,5);dots.forEach((d,i)=>d.classList.toggle('on',i===ai));
+}
+gsap.registerPlugin(ScrollTrigger);
+const lenis=new Lenis({lerp:.09});
+lenis.on('scroll',e=>{ScrollTrigger.update();$('#nav').classList.toggle('hide',e.direction===1&&V>20)});
+gsap.ticker.add(t=>{lenis.raf(t*1000);if(dirty){dirty=false;render()}});gsap.ticker.lagSmoothing(0);
+ScrollTrigger.create({trigger:'#stage',start:'top top',end:'bottom bottom',onUpdate:s=>{V=s.progress*TOTAL;dirty=true}});
+/* ---- boot: detect frames, load, play the intro ---- */
+(async()=>{
+ const t0=performance.now(),[na,nb]=await Promise.all([count(F.a),count(F.b)]);S.a.n=na;S.b.n=nb;
+ if(!na){$('#err').style.display='block';return}
+ const idx=k=>{const r=[];for(let i=0;i<S[k].n;i+=6)r.push(i);if(r.at(-1)!==S[k].n-1)r.push(S[k].n-1);return r};
+ const boot=[...idx('a').map(i=>['a',i]),...idx('b').map(i=>['b',i])];let done=0;
+ await Promise.all(boot.map(([k,i])=>ld(k,i).then(()=>{done++;$('#cnt').textContent=String(Math.round(done/boot.length*100)).padStart(3,'0');dirty=true})));
+ const rest=[];['a','b'].forEach(k=>{for(let i=0;i<S[k].n;i++)if(!S[k].im[i])rest.push([k,i])});
+ let q=0;const w=async()=>{while(q<rest.length){const[k,i]=rest[q++];await ld(k,i);dirty=true}};for(let j=0;j<6;j++)w();
+ if(RM){$('#ld').remove();$('.mark').remove();$('#nav').style.opacity=1;dirty=true;return}
+ await new Promise(r=>setTimeout(r,Math.max(0,1800-(performance.now()-t0))));
+ const seen=sessionStorage.seen;sessionStorage.seen=1;
+ intro=true;introF=.07;lenis.stop();gsap.set('.logo',{opacity:0});gsap.set('.hero .ln,.hero p,.hero .btns,.cue',{y:40,opacity:0});
+ const m=$('.mark').getBoundingClientRect(),n=$('.logo').getBoundingClientRect(),hole={r:0};
+ const tl=gsap.timeline({onComplete:()=>{intro=false;lenis.start();gsap.set('.logo',{opacity:1});$('#ld').remove();$('.mark').remove();dirty=true}});
+ tl.to('#cnt',{opacity:0,duration:.4},0)
+  .to('.mark',{x:n.left-m.left,y:n.top-m.top,scale:n.width/m.width,transformOrigin:'0 0',duration:1,ease:'power3.inOut'},0)
+  .to(hole,{r:150,duration:1,ease:'power2.inOut',onUpdate:()=>$('#ld').style.setProperty('--r',hole.r+'%')},.2)
+  .to({p:0},{p:1,duration:1.6,ease:'power2.inOut',onUpdate(){introF=.07*(1-this.targets()[0].p);dirty=true}},1)
+  .to('.hero .ln',{y:0,opacity:1,stagger:.12,duration:.9,ease:'power3.out'},2.2)
+  .to('.hero p,.hero .btns,.cue',{y:0,opacity:1,duration:.8,stagger:.1,ease:'power3.out'},2.8)
+  .to('#nav',{opacity:1,duration:.6},3.2);
+ $('#ld').onclick=()=>tl.progress(1);if(seen)tl.progress(1);
+})();
+</script>
+</body>
+</html>
